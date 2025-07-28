@@ -3,3 +3,15 @@ server:
 
 spring:
   application.name: text-processor-service
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
+    listener:
+      simple:
+        prefetch: 4
+        retry:
+          enabled: true
+          initial-interval: 10s
+          max-attempts: 3
