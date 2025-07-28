@@ -22,6 +22,7 @@ public class RabbitMQConfig {
     public static final String DEAD_LETTER_QUEUE_POST_PROCESSING = POST_PROCESSING + ".dlq";
 
     public static final String ROUTING_KEY_PROCESS_TEXT = "process-text";
+    public static final String ROUTING_KEY_PROCESSED_TEXT = "processed-text";
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter(ObjectMapper objectMapper) {
