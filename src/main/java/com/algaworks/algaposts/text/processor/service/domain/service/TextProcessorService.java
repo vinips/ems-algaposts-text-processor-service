@@ -1,6 +1,6 @@
 package com.algaworks.algaposts.text.processor.service.domain.service;
 
-import com.algaworks.algaposts.text.processor.service.domain.infrastructure.rabbitmq.RabbitMQConfig;
+import com.algaworks.algaposts.text.processor.service.infrastructure.rabbitmq.RabbitMQConfig;
 import com.algaworks.algaposts.text.processor.service.domain.model.PostProcessingData;
 import com.algaworks.algaposts.text.processor.service.domain.model.PostProcessingResultData;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class TextProcessorService {
     private static final Double WORD_PRICE = 0.10;
 
     public void processWordCountAndValue(PostProcessingData postProcessingData) {
-        Integer wordCount = getWordCount(postProcessingData);
+        Integer wordCount = getWordCount(postProcessingData.getPostBody());
         Double textPrice = calculeTextPrice(wordCount);
 
         log.info("Words count: {}, Text price: {}", wordCount, textPrice);
@@ -30,15 +30,16 @@ public class TextProcessorService {
         sendPostProcessingResultData(resultData);
     }
 
-    private Integer getWordCount(PostProcessingData postProcessingData) {
-        return new StringTokenizer(postProcessingData.getPostBody()).countTokens();
+    private Integer getWordCount(String postBody) {
+        return new StringTokenizer(postBody).countTokens();
     }
 
     private Double calculeTextPrice(Integer wordCount) {
         return wordCount * WORD_PRICE;
     }
 
-    private PostProcessingResultData creatPostProcessingResultData(PostProcessingData postProcessingData, Integer wordCount, Double textPrice) {
+    private PostProcessingResultData creatPostProcessingResultData(PostProcessingData postProcessingData,
+                                                                   Integer wordCount, Double textPrice) {
         return PostProcessingResultData.builder()
                 .postId(postProcessingData.getPostId())
                 .wordCount(wordCount)
@@ -47,7 +48,7 @@ public class TextProcessorService {
     }
 
     private void sendPostProcessingResultData(PostProcessingResultData resultData) {
-        String exchange = RabbitMQConfig.DIRECT_EXCHANGE_POST_PROCESSED;
+        String exchange = RabbitMQConfig.DIRECT_EXCHANGE_POST_PROCESSING_RESULT;
         String rountingKey = RabbitMQConfig.ROUTING_KEY_PROCESSED_TEXT;
         Object payLoad = resultData;
 
