@@ -1,4 +1,4 @@
-package com.algaworks.algaposts.text.processor.service.domain.infrastructure.rabbitmq;
+package com.algaworks.algaposts.text.processor.service.infrastructure.rabbitmq;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.*;
@@ -14,14 +14,16 @@ import java.util.Map;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String DIRECT_EXCHANGE_POST_RECEIVED = "post-service.post-received.v1.e";
-    public static final String DIRECT_EXCHANGE_POST_PROCESSED = "text-processor-service.post-processed.v1.e";
-
     private static final String POST_PROCESSING = "text-processor-service.post-processing.v1";
+
+    public static final String DIRECT_EXCHANGE_POST_PROCESSING = POST_PROCESSING + ".e";
     public static final String QUEUE_POST_PROCESSING = POST_PROCESSING + ".q";
     public static final String DEAD_LETTER_QUEUE_POST_PROCESSING = POST_PROCESSING + ".dlq";
 
     public static final String ROUTING_KEY_PROCESS_TEXT = "process-text";
+
+    //exchange and routing key to post-service
+    public static final String DIRECT_EXCHANGE_POST_PROCESSING_RESULT = "post-service.post-processing-result.v1.e";
     public static final String ROUTING_KEY_PROCESSED_TEXT = "processed-text";
 
     @Bean
@@ -54,15 +56,9 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public DirectExchange exchangePostProcessed() {
+    public DirectExchange exchangePostProcessing() {
         return ExchangeBuilder
-                .directExchange(DIRECT_EXCHANGE_POST_PROCESSED)
-                .build();
-    }
-
-    public DirectExchange exchangePostReceived() {
-        return ExchangeBuilder
-                .directExchange(DIRECT_EXCHANGE_POST_RECEIVED)
+                .directExchange(DIRECT_EXCHANGE_POST_PROCESSING)
                 .build();
     }
 
@@ -70,7 +66,7 @@ public class RabbitMQConfig {
     public Binding bindingPostProcessing() {
         return BindingBuilder
                 .bind(queuePostProcessing())
-                .to(exchangePostReceived())
+                .to(exchangePostProcessing())
                 .with(ROUTING_KEY_PROCESS_TEXT);
     }
 

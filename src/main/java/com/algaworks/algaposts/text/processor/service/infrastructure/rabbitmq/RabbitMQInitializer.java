@@ -1,4 +1,4 @@
-package com.algaworks.algaposts.text.processor.service.domain.infrastructure.rabbitmq;
+package com.algaworks.algaposts.text.processor.service.infrastructure.rabbitmq;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

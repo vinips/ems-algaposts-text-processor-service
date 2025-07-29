@@ -1,4 +1,4 @@
-package com.algaworks.algaposts.text.processor.service.domain.infrastructure.rabbitmq;
+package com.algaworks.algaposts.text.processor.service.infrastructure.rabbitmq;
 
 import com.algaworks.algaposts.text.processor.service.domain.model.PostProcessingData;
 import com.algaworks.algaposts.text.processor.service.domain.service.TextProcessorService;
